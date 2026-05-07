@@ -1,0 +1,29 @@
+# ML / scientific computing
+numpy>=1.26
+pandas>=2.0
+scipy>=1.10
+scikit-learn>=1.3
+
+# Gradient boosting
+xgboost>=2.0
+lightgbm>=4.0
+catboost>=1.2
+
+# Deep learning
+torch>=2.0
+transformers>=4.38      # for ASTModel, ASTFeatureExtractor
+
+# Audio
+librosa>=0.10
+soundfile>=0.12
+noisereduce>=3.0        # spectral-gating denoising
+
+# Plotting
+matplotlib>=3.8
+seaborn>=0.13
+
+# Progress bars / utilities
+tqdm>=4.66
+
+# Optional: only needed if running the BEATs baseline
+# pip install timm einops

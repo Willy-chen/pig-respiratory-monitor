@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+.eggs/
+.tox/
+.venv/
+venv/
+env/
+build/
+dist/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors / OS
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Logs
+*.log
+*.out
+
+# Large model checkpoints (link to Hugging Face / upstream instead)
+*.safetensors
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.h5
+best_ast_model/
+pretrained_models/
+ESC-50/
+
+# Cached training/inference state we don't want to ship
+catboost_info/
+results/plots/        # auto-regenerated; the curated subset is in figures/
+
+# Stray .npy files (but DO ship the dataset arrays under data/)
+*.npy
+!data/features.npy
+!data/splits/**/train_idx.npy
+!data/splits/**/test_idx.npy
+
+# Local audio (private dataset — not to be checked in)
+*.wav
+*.mp3
+*.flac
+*.ogg
+audio/
+strong_labels/
+
+# Latex side-effects (in case anyone copies the manuscript here)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
+*.lot
+*.lof
+*.out

@@ -1,0 +1,12 @@
+Best Macro F1: 0.8834
+Config: {'N_Mult': 2, 'A_Mult': 1, 'T_N': np.float64(0.6000000000000002), 'T_A': np.float64(0.5500000000000002)}
+
+              precision    recall  f1-score   support
+
+No-Breathing       0.83      0.84      0.84       533
+      Normal       0.91      0.95      0.93       588
+    Abnormal       0.92      0.85      0.88       432
+
+    accuracy                           0.89      1553
+   macro avg       0.89      0.88      0.88      1553
+weighted avg       0.89      0.89      0.89      1553

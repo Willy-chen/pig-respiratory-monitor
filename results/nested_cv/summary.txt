@@ -1,0 +1,12 @@
+Nested-CV Aggregate Macro F1: 0.8713
+
+              precision    recall  f1-score   support
+
+No-Breathing       0.84      0.80      0.82       533
+      Normal       0.90      0.95      0.92       588
+    Abnormal       0.89      0.86      0.87       432
+
+    accuracy                           0.87      1553
+   macro avg       0.87      0.87      0.87      1553
+weighted avg       0.87      0.87      0.87      1553
+

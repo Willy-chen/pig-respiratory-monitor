@@ -1,0 +1,31 @@
+{
+  "protocol": "AST-XGB: nested LOOCV; baselines at argmax (each baseline's default decision rule)",
+  "ast_xgb": {
+    "f1": 0.8712752229187654,
+    "ci_lo": 0.7739846705468131,
+    "ci_hi": 0.9086286003633162
+  },
+  "yin_2021_alexnet": {
+    "f1": 0.8263535122747198,
+    "ci_lo": 0.6923148398469064,
+    "ci_hi": 0.8920391558689801
+  },
+  "dorr_2026_beats": {
+    "f1": 0.8018388348227036,
+    "ci_lo": 0.6827086775805273,
+    "ci_hi": 0.8762173557278747
+  },
+  "perm_test": {
+    "ast_vs_alexnet": {
+      "diff": 0.01745364622742209,
+      "p": 0.2773
+    },
+    "ast_vs_beats": {
+      "diff": 0.11065595057970837,
+      "p": 0.0168
+    }
+  },
+  "n_pigs": 16,
+  "n_iter_bootstrap": 10000,
+  "n_iter_perm": 10000
+}

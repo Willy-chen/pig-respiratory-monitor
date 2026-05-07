@@ -1,0 +1,7 @@
+{
+    "macro_f1": 0.871549974499621,
+    "accuracy": 0.8750804893754024,
+    "total_train_time_s": 250.22699737548828,
+    "inference_latency_ms": 0.00504501696486513,
+    "report": "              precision    recall  f1-score   support\n\nNo-Breathing       0.79      0.88      0.83       533\n      Normal       0.93      0.94      0.93       588\n    Abnormal       0.92      0.79      0.85       432\n\n    accuracy                           0.88      1553\n   macro avg       0.88      0.87      0.87      1553\nweighted avg       0.88      0.88      0.88      1553\n"
+}
