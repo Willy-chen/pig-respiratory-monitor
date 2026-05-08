@@ -97,7 +97,7 @@ This dataset is permanently archived at Zenodo:
 
 > [10.5281/zenodo.20084290](https://doi.org/10.5281/zenodo.20084290)
 
-When citing the dataset specifically (separately from the paper), use the Zenodo record. The Zenodo and GitHub copies of  and  are byte-identical for tag .
+When citing the dataset specifically (separately from the paper), use the Zenodo record. The Zenodo and GitHub copies of `data/features.npy` and `data/splits/` are byte-identical for tag `v1.0-submission`.
 
 ## Provenance
 
