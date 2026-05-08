@@ -1,6 +1,6 @@
 # Pig Respiratory Monitor
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20084290.svg)](https://doi.org/10.5281/zenodo.20084290)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20084289.svg)](https://doi.org/10.5281/zenodo.20084289)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Code, pre-computed AST embeddings, and evaluation results for the paper:
@@ -82,7 +82,7 @@ If you use this code, please cite our paper (BibTeX entry will be added on accep
     journal = {Computers and Electronics in Agriculture},
     year    = {2026},
     note    = {under review},
-    note    = {Code and dataset: \url{https://doi.org/10.5281/zenodo.20084290}}
+    note    = {Code and dataset: \url{https://doi.org/10.5281/zenodo.20084289}}
 }
 ```
 

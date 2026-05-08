@@ -111,7 +111,7 @@ Clinical decision-making in production veterinary settings without re-validation
 Yes — the AST-embedding subset is released under MIT license alongside the code in this repository. The underlying raw audio is *not* redistributed; access can be requested under a data-use agreement.
 
 **How will the dataset be distributed?**
-GitHub repository: <https://github.com/Willy-chen/pig-respiratory-monitor>. Permanent archival DOI: <https://doi.org/10.5281/zenodo.20084290>.
+GitHub repository: <https://github.com/Willy-chen/pig-respiratory-monitor>. Permanent archival DOI: <https://doi.org/10.5281/zenodo.20084289>.
 
 **When will the dataset be distributed?**
 On acceptance of the paper.

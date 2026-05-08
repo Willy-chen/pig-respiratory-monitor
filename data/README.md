@@ -95,7 +95,9 @@ for fold_idx in range(16):
 
 This dataset is permanently archived at Zenodo:
 
-> [10.5281/zenodo.20084290](https://doi.org/10.5281/zenodo.20084290)
+> Concept DOI (always points at latest version): [10.5281/zenodo.20084289](https://doi.org/10.5281/zenodo.20084289)
+>
+> Version-specific DOIs:  v1.0-submission [10.5281/zenodo.20084290](https://doi.org/10.5281/zenodo.20084290) ;  v1.0.1 [10.5281/zenodo.20084358](https://doi.org/10.5281/zenodo.20084358)
 
 When citing the dataset specifically (separately from the paper), use the Zenodo record. The Zenodo and GitHub copies of `data/features.npy` and `data/splits/` are byte-identical for tag `v1.0-submission`.
 

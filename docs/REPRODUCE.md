@@ -15,7 +15,7 @@ This is the fastest path and what `reproduce.sh` does. It re-derives the paper's
 git clone https://github.com/Willy-chen/pig-respiratory-monitor.git
 
 # OR archived data + code snapshot (citable, immutable):
-# https://doi.org/10.5281/zenodo.20084290
+# https://doi.org/10.5281/zenodo.20084289
 cd pig-respiratory-monitor
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
