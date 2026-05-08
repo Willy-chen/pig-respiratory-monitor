@@ -91,6 +91,14 @@ for fold_idx in range(16):
 - **Strong-label timestamps** — derived from the raw audio annotations; not redistributed for the same reason.
 - **The fine-tuned AST checkpoint** that produced these embeddings — available on Hugging Face: <https://huggingface.co/willychenwii/pig-condition-ast-finetuned>. Anyone who downloads the checkpoint and obtains the raw audio under a DUA can regenerate `features.npy` byte-for-byte using `src/pipeline/run_ultimate_search.py`'s feature-extraction block.
 
+## Citation & archival DOI
+
+This dataset is permanently archived at Zenodo:
+
+> [10.5281/zenodo.20084290](https://doi.org/10.5281/zenodo.20084290)
+
+When citing the dataset specifically (separately from the paper), use the Zenodo record. The Zenodo and GitHub copies of  and  are byte-identical for tag .
+
 ## Provenance
 
 These embeddings are the **mean of the last 3 hidden layers** of the AST checkpoint released as `willychenwii/pig-condition-ast-finetuned`, computed on 10-second 16 kHz mono segments after a 50–3000 Hz bandpass + spectral-gating denoise (`noisereduce` library, gate threshold –20 dB). Segment IDs are stable across re-runs as long as the same audio source files and the same data-loader RNG seed (42) are used; the segment ordering matches the order produced by `src/pipeline/data_utils.py::create_study_split` on the original dataset.
