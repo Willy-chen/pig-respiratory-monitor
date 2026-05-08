@@ -87,7 +87,7 @@ for fold_idx in range(16):
 
 ## What is **not** here
 
-- **Raw audio (`.wav` files)** — confidential to the participating commercial pig farm; access may be requested from the corresponding author (`jang@mirlab.org`) under a data-use agreement.
+- **Raw audio (`.wav` files)** — confidential to the participating commercial pig farm; access may be requested from Prof. Chao-Wei Huang (`cwhuang@mail.npust.edu.tw`) at the Animal Nutrigenomics Laboratory, NPUST, under a data-use agreement.
 - **Strong-label timestamps** — derived from the raw audio annotations; not redistributed for the same reason.
 - **The fine-tuned AST checkpoint** that produced these embeddings — available on Hugging Face: <https://huggingface.co/willychenwii/pig-condition-ast-finetuned>. Anyone who downloads the checkpoint and obtains the raw audio under a DUA can regenerate `features.npy` byte-for-byte using `src/pipeline/run_ultimate_search.py`'s feature-extraction block.
 

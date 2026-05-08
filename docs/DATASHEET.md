@@ -124,7 +124,7 @@ On acceptance of the paper.
 Wei-Yu Chen (`d14922032@ntu.edu.tw`); maintenance pull requests welcome. Substantive issues should be raised via GitHub Issues.
 
 **How can the owner / curator be contacted?**
-Corresponding author: Jyh-Shing Roger Jang (`jang@mirlab.org`). First author: Wei-Yu Chen.
+Dataset access: Prof. Chao-Wei Huang (`cwhuang@mail.npust.edu.tw`), NPUST Animal Nutrigenomics Laboratory. Paper corresponding author: Jyh-Shing Roger Jang (`jang@mirlab.org`). First author: Wei-Yu Chen.
 
 **Is there a versioning scheme?**
 v1.0 corresponds to the embeddings used in the paper as submitted. Future re-extractions (e.g., with an updated AST checkpoint) will be tagged as v1.1, v2.0, etc.

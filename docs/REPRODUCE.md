@@ -69,7 +69,7 @@ This regenerates `results/baseline_probs/yin_2021_probs.csv` and `results/baseli
 For complete end-to-end reproduction including AST fine-tuning + feature extraction.
 
 **Additional prerequisites**:
-1. Raw audio dataset under a data-use agreement; contact `jang@mirlab.org`.
+1. Raw audio dataset under a data-use agreement; contact Prof. Chao-Wei Huang (`cwhuang@mail.npust.edu.tw`).
 2. Strong-label TXT files (start/end/label triples per recording).
 3. The pretrained AST checkpoint `MIT/ast-finetuned-audioset-10-10-0.4593` (auto-downloaded by `transformers` on first run).
 
