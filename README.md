@@ -61,7 +61,7 @@ Expected runtime: ≈ 60 minutes (mostly the inner XGBoost LOOCV; CPU-bound).
 ## Full reproduction including AST fine-tuning (~6 GPU-hours)
 
 To reproduce from raw audio you also need:
-1. The raw stethoscope audio dataset, which is not publicly available due to confidentiality with the participating commercial pig farm. Access may be requested from the corresponding author (`jang@mirlab.org`) under a data-use agreement.
+1. The raw stethoscope audio dataset, which is not publicly available due to confidentiality with the participating commercial pig farm. Access may be requested from Prof. Chao-Wei Huang (`cwhuang@mail.npust.edu.tw`) at the NPUST Animal Nutrigenomics Laboratory under a data-use agreement.
 2. The fine-tuned AST checkpoint, available at <https://huggingface.co/willychenwii/pig-condition-ast-finetuned>.
 3. The official BEATs `BEATs_iter3_plus_AS2M.pt` checkpoint for the BEATs baseline (download per the upstream BEATs repository).
 4. The ESC-50 dataset for the SNR stress-test out-of-distribution noise tier (see <https://github.com/karolpiczak/ESC-50>).
