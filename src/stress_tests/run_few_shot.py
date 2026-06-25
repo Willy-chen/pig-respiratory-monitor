@@ -15,7 +15,7 @@ from train_evaluate import evaluate_epoch, train_one_epoch
 # Define the models registry
 MODELS = {
     'yin_2021': {'path': 'baselines.yin_2021.model', 'class': 'SpectrogramAlexNet', 'args': {'num_classes': 3, 'pretrained': True}, 'epochs': 10},
-    'dorr_2026': {'path': 'baselines.dorr_2026.model', 'class': 'DorrBEATsOfficial', 'args': {'ckpt_path': '../20260322/pretrained_models/BEATs_iter3_plus_AS2M.pt', 'num_classes': 3}, 'epochs': 3},
+    'dorr_2026': {'path': 'baselines.dorr_2026.model', 'class': 'DorrBEATsOfficial', 'args': {'ckpt_path': '/home/willy/pig/pig-respiratory-monitor/src/baselines/pretrained_models/BEATs_iter3_plus_AS2M.pt', 'num_classes': 3}, 'epochs': 3},
     'nithin_2026': {'path': 'baselines.nithin_2026.model', 'class': 'LSTMKAN', 'args': {'num_classes': 3}, 'epochs': 10},
 }
 
@@ -29,45 +29,40 @@ def subsample_df(df, frac, seed=42):
     except:
         return df.sample(frac=frac, random_state=seed).reset_index(drop=True)
 
-def run_dl_few_shot(model_name, train_ratios, xgb_df):
+def run_dl_few_shot(model_name, train_ratios, xgb_df, seeds=[42, 123, 7]):
     from importlib import import_module
     m_info = MODELS[model_name]
     mod = import_module(m_info['path'])
     ModelClass = getattr(mod, m_info['class'])
-    
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     results = []
-    
     for ratio in train_ratios:
-        print(f"\n>>> Running DL Model {model_name} at {ratio*100}% Training Data")
-        all_preds, all_targets = [], []
+        print(f">>> DL {model_name} at {ratio*100}% data")
         epochs = m_info['epochs']
-        
-        for fold_idx, (train_ds, test_ds, test_file) in enumerate(get_loocv_folds(xgb_df)):
-            # Subsample the training data
-            train_ds.df = subsample_df(train_ds.df, ratio)
-            train_loader, test_loader = make_loaders(train_ds, test_ds, batch_size=32)
-            
-            model = ModelClass(**m_info['args']).to(device)
-            criterion = nn.CrossEntropyLoss()
-            optimizer = torch.optim.Adam(model.parameters(), lr=1e-4 if model_name=='yin_2021' else 1e-3)
-            
-            for epoch in range(epochs):
-                train_one_epoch(model, train_loader, criterion, optimizer, device)
-            
-            # Predict
-            model.eval()
-            with torch.no_grad():
-                for X, y in test_loader:
-                    X = X.to(device, dtype=torch.float32)
-                    preds = model(X).argmax(dim=1).cpu().numpy()
-                    all_preds.extend(preds)
-                    all_targets.extend(y.numpy())
-                    
-        f1 = f1_score(all_targets, all_preds, average='macro', zero_division=0)
-        print(f"[{model_name} | {ratio*100}%] Macro F1: {f1:.4f}")
-        results.append({'Model': model_name, 'Train_Ratio': ratio, 'F1': f1})
-        
+        seed_f1s = []
+        for seed in seeds:
+            torch.manual_seed(seed); np.random.seed(seed)
+            all_preds, all_targets = [], []
+            for fold_idx, (train_ds, test_ds, test_file) in enumerate(get_loocv_folds(xgb_df)):
+                train_ds.df = subsample_df(train_ds.df, ratio, seed=seed)
+                train_loader, test_loader = make_loaders(train_ds, test_ds, batch_size=32)
+                model = ModelClass(**m_info['args']).to(device)
+                criterion = nn.CrossEntropyLoss()
+                optimizer = torch.optim.Adam(model.parameters(), lr=1e-4 if model_name=='yin_2021' else 1e-3)
+                for epoch in range(epochs):
+                    train_one_epoch(model, train_loader, criterion, optimizer, device)
+                model.eval()
+                with torch.no_grad():
+                    for X, y in test_loader:
+                        X = X.to(device, dtype=torch.float32)
+                        preds = model(X).argmax(dim=1).cpu().numpy()
+                        all_preds.extend(preds); all_targets.extend(y.numpy())
+            f1 = f1_score(all_targets, all_preds, average='macro', zero_division=0)
+            print(f"[{model_name} | {ratio*100}% | seed {seed}] Macro F1: {f1:.4f}")
+            seed_f1s.append(f1)
+        mean_f1 = float(np.mean(seed_f1s))
+        print(f"[{model_name} | {ratio*100}%] MEAN: {mean_f1:.4f} runs={[round(x,4) for x in seed_f1s]}")
+        results.append({'Model': model_name, 'Train_Ratio': ratio, 'F1': mean_f1, 'F1_runs': ';'.join('%.4f'%x for x in seed_f1s)})
     return results
 
 def run_ultimate_few_shot(train_ratios):
@@ -75,7 +70,7 @@ def run_ultimate_few_shot(train_ratios):
     import xgboost as xgb
     
     print("\n>>> Running Ultimate Model (AST+XGB) Few Shot")
-    cache_path = "../20260302_ultimate/results/features_3layer_mean.pkl"
+    cache_path = "/home/willy/pig/pig-respiratory-monitor/results/features_3layer_mean.pkl"
     with open(cache_path, 'rb') as f:
         X, y, groups = pickle.load(f)
         
@@ -171,7 +166,7 @@ def main():
     xgb_df = get_loocv_df()
     csv_file = "few_shot_results.csv"
     
-    models = ['ultimate_ast_xgb', 'yin_2021', 'dorr_2026', 'nithin_2026']
+    models = ['ultimate_ast_xgb', 'yin_2021', 'dorr_2026']
     
     for m_id in models:
         print(f"\n>>> CHECKING: {m_id}")
