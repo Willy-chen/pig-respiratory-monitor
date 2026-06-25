@@ -29,6 +29,20 @@ TARGET_LEN = SR * int(SEGMENT_DURATION)
 
 CLASS_NAMES = ['No-Breathing', 'Normal', 'Abnormal']
 
+_WAVE_CACHE = {}
+def load_segment_cached(audio_path, start):
+    key = (audio_path, round(float(start), 4))
+    y = _WAVE_CACHE.get(key)
+    if y is None:
+        try:
+            y, _ = librosa.load(audio_path, sr=SR, offset=float(start), duration=SEGMENT_DURATION)
+        except Exception:
+            y = np.zeros(TARGET_LEN, dtype=np.float32)
+        y = np.pad(y, (0, TARGET_LEN - len(y))) if len(y) < TARGET_LEN else y[:TARGET_LEN]
+        y = y.astype(np.float32)
+        _WAVE_CACHE[key] = y
+    return y
+
 _MANIFEST_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "segments_xgb_1553_manifest.csv"))
 
 def get_loocv_df():
@@ -61,20 +75,7 @@ class PigSegmentDataset(Dataset):
 
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
-        try:
-            y, _ = librosa.load(
-                row['Audio_Path'], sr=SR,
-                offset=float(row['Start']),
-                duration=SEGMENT_DURATION
-            )
-        except Exception:
-            y = np.zeros(TARGET_LEN, dtype=np.float32)
-
-        # Fixed-length padding or truncation to exactly 10s
-        if len(y) < TARGET_LEN:
-            y = np.pad(y, (0, TARGET_LEN - len(y)))
-        else:
-            y = y[:TARGET_LEN]
+        y = load_segment_cached(row['Audio_Path'], row['Start'])
 
         if self.transform_fn:
             return self.transform_fn(y, SR), int(row['Target'])

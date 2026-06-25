@@ -30,7 +30,7 @@ SR = 16000
 SEG_LEN = SR * 10
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../20260322')))
-from data_loader import get_loocv_df, make_loaders, PigSegmentDataset
+from data_loader import get_loocv_df, make_loaders, PigSegmentDataset, load_segment_cached
 from train_evaluate import train_one_epoch
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -39,7 +39,7 @@ SNR_LEVELS = [None, 10, 0, -5, -10]   # None = Clean
 NOISE_TYPES = ['Farm', 'White', 'Pink']
 
 # ── Baseline registry (model_name -> factory info) ──────────────────────────
-CKPT_BEATS = os.path.abspath('../20260322/pretrained_models/BEATs_iter3_plus_AS2M.pt')
+CKPT_BEATS = '/home/willy/pig/pig-respiratory-monitor/src/baselines/pretrained_models/BEATs_iter3_plus_AS2M.pt'
 
 BASELINE_REGISTRY = {
     'ultimate_ast_xgb': None,  # handled separately
@@ -83,8 +83,8 @@ def load_farm_noise_pool(noise_df):
 
 def load_esc50_noise_pool():
     """Load ESC-50 'Rain' and 'Wind' samples as environmental noise pool."""
-    meta_path = "ESC-50/meta/esc50.csv"
-    audio_dir = "ESC-50/audio"
+    meta_path = "/home/willy/pig/pig-respiratory-monitor/src/stress_tests/ESC-50/meta/esc50.csv"
+    audio_dir = "/home/willy/pig/pig-respiratory-monitor/src/stress_tests/ESC-50/audio"
     if not os.path.exists(meta_path): return []
     
     df = pd.read_csv(meta_path)
@@ -138,7 +138,7 @@ def get_noise_sample(noise_type, farm_pool, esc50_pool, length):
 
 def get_ast_model_and_processor():
     from transformers import ASTModel, ASTFeatureExtractor
-    AST_MODEL_PATH = "../20260209_n/best_ast_model"
+    AST_MODEL_PATH = "/home/willy/pig/pigcais/20260209_n/best_ast_model"
     m = ASTModel.from_pretrained(AST_MODEL_PATH, output_hidden_states=True).to(DEVICE).eval()
     p = ASTFeatureExtractor.from_pretrained(AST_MODEL_PATH)
     return m, p
@@ -155,12 +155,7 @@ def encode_with_ast(audio_arr, ast_model, processor):
 # ── Evaluation helpers ────────────────────────────────────────────────────────
 
 def load_audio_arr(row):
-    try:
-        y, _ = librosa.load(row['Audio_Path'], sr=SR, offset=float(row['Start']), duration=10.0)
-        if len(y) < SEG_LEN: y = np.pad(y, (0, SEG_LEN - len(y)))
-        return y[:SEG_LEN].astype(np.float32)
-    except:
-        return np.zeros(SEG_LEN, dtype=np.float32)
+    return load_segment_cached(row['Audio_Path'], row['Start'])
 
 def eval_ultimate_noisy(bst, test_df, farm_pool, esc50_pool, noise_type, snr_db, ast_model, processor):
     """Evaluate xgboost on noisy test segments by re-extracting AST features."""
@@ -244,7 +239,7 @@ def main():
     unique_files = xgb_df['Filename'].unique()
 
     # Load cached AST features for Ultimate (clean training)
-    cache_path = "../20260302_ultimate/results/features_3layer_mean.pkl"
+    cache_path = "/home/willy/pig/pig-respiratory-monitor/results/features_3layer_mean.pkl"
     with open(cache_path, 'rb') as f:
         X_ast, y_ast, groups_ast = pickle.load(f)
 

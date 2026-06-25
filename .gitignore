@@ -65,3 +65,5 @@ strong_labels/
 *.lot
 *.lof
 *.out
+src/baselines/pretrained_models/
+src/stress_tests/ESC-50/
