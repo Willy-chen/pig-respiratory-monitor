@@ -14,6 +14,7 @@ CRITICAL DESIGN NOTES:
 import os
 import sys
 import numpy as np
+import pandas as pd
 import librosa
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -28,14 +29,19 @@ TARGET_LEN = SR * int(SEGMENT_DURATION)
 
 CLASS_NAMES = ['No-Breathing', 'Normal', 'Abnormal']
 
+_MANIFEST_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "segments_xgb_1553_manifest.csv"))
+
 def get_loocv_df():
-    """
-    Returns the XGB_DF — the same set used by 20260302_ultimate's evaluation.
-    This is a file-level stratified 50% holdout of all recordings.
-    """
-    full_df = get_full_dataset()
-    _, xgb_df = create_study_split(full_df)
-    return xgb_df
+    """XGB_DF (1,553 segs / 16 pigs) from the reconstructed headline manifest."""
+    m = pd.read_csv(_MANIFEST_PATH)
+    df = pd.DataFrame({
+        "Filename": m["pig_id"].astype(str),
+        "Audio_Path": m["Audio_Path"].astype(str),
+        "Start": m["Start"].astype(float),
+        "Target": m["label"].astype(int),
+    })
+    df.index = m["segment_idx"].astype(int)
+    return df
 
 
 class PigSegmentDataset(Dataset):
@@ -84,13 +90,9 @@ def get_loocv_folds(xgb_df, transform_fn=None):
     Implements file-level Leave-One-Out Cross Validation. Re-merges the AST_SET
     into the training data to ensure fair representation compared to the ultimate method.
     """
-    full_df = get_full_dataset()
-    ast_df, _ = create_study_split(full_df)
-    
     unique_files = xgb_df['Filename'].unique()
     for test_file in unique_files:
-        xgb_train_df = xgb_df[xgb_df['Filename'] != test_file]
-        train_df = pd.concat([ast_df, xgb_train_df], ignore_index=True)
+        train_df = xgb_df[xgb_df['Filename'] != test_file]
         test_df  = xgb_df[xgb_df['Filename'] == test_file]
         yield (
             PigSegmentDataset(train_df, transform_fn=transform_fn),
